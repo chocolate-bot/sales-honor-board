@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>第二周销售星光大赏</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body {
+            background-color: #fff5f5;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            overflow-x: hidden;
+            touch-action: manipulation;
+        }
+        /* 基础飘落粒子 */
+        .particle {
+            position: fixed;
+            top: -50px;
+            pointer-events: none;
+            z-index: 50;
+            animation: fall linear forwards;
+        }
+        @keyframes fall {
+            to { transform: translateY(110vh) rotate(360deg); }
+        }
+        /* 按钮点击反馈 */
+        .btn-active:active {
+            transform: scale(0.95);
+        }
+        /* 烟花画布层 */
+        #firework-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 200;
+        }
+        .avatar-glow { box-shadow: 0 0 20px rgba(255, 183, 3, 0.4); }
+    </style>
+</head>
+<body class="pb-10">
+    <canvas id="firework-canvas"></canvas>
+    <div id="particle-container"></div>
+    <!-- 顶部标题 -->
+    <header class="relative pt-10 pb-6 text-center px-4">
+        <div class="inline-block relative mb-4">
+            <div class="bg-red-600 p-5 rounded-3xl shadow-2xl animate-bounce">
+                <span class="text-4xl">🏆</span>
+            </div>
+        </div>
+        <h1 class="text-4xl font-black text-red-700 tracking-tight mb-1">第二周·销售星光大赏</h1>
+        <p class="text-gray-400 font-bold tracking-[0.2em] text-[10px] uppercase">Honor Roll Ceremony · 2026.02</p>
+    </header>
+    <!-- 前三名荣誉区 -->
+    <main class="max-w-md mx-auto px-4 space-y-4 mb-10">
+        <!-- 冠军 (王文楠) -->
+        <div class="relative bg-gradient-to-br from-yellow-400 via-orange-500 to-yellow-600 p-1 rounded-[40px] shadow-2xl overflow-hidden">
+            <div class="bg-white rounded-[38px] p-6 flex items-center gap-6 relative z-10">
+                <div class="relative">
+                    <div class="w-24 h-24 bg-yellow-50 rounded-full flex items-center justify-center text-6xl avatar-glow border-4 border-white overflow-hidden">
+                        🦸♂️
+                    </div>
+                    <div class="absolute -top-2 -right-2 bg-yellow-400 p-1.5 rounded-full shadow-lg border-2 border-white">👑</div>
+                </div>
+                <div class="flex-1">
+                    <span class="bg-red-100 text-red-600 text-[10px] font-black px-2 py-0.5 rounded-full mb-1 inline-block uppercase tracking-wider">业绩战神</span>
+                    <h2 class="text-3xl font-black text-gray-800">王文楠</h2>
+                    <div class="text-red-600 text-3xl font-black mt-1">¥11,730</div>
+                </div>
+            </div>
+        </div>
+        <!-- 亚军 (孙晓媛) -->
+        <div class="bg-white border-2 border-blue-100 rounded-[35px] p-6 shadow-xl flex items-center gap-5">
+            <div class="w-20 h-20 bg-blue-50 rounded-full flex items-center justify-center text-5xl border-4 border-white shadow-sm">
+                👸
+            </div>
+            <div class="flex-1">
+                <span class="bg-blue-100 text-blue-600 text-[10px] font-black px-2 py-0.5 rounded-full mb-1 inline-block">开单女王</span>
+                <h3 class="text-2xl font-black text-gray-800">孙晓媛</h3>
+                <div class="text-blue-600 text-2xl font-black">¥4,290</div>
+            </div>
+        </div>
+        <!-- 季军 (封硕) -->
+        <div class="bg-white border-2 border-rose-100 rounded-[35px] p-6 shadow-xl flex items-center gap-5">
+            <div class="w-20 h-20 bg-rose-50 rounded-full flex items-center justify-center text-5xl border-4 border-white shadow-sm">
+                🧚♀️
+            </div>
+            <div class="flex-1">
+                <span class="bg-rose-100 text-rose-600 text-[10px] font-black px-2 py-0.5 rounded-full mb-1 inline-block">成交锦鲤</span>
+                <h3 class="text-2xl font-black text-gray-800">封硕</h3>
+                <div class="text-rose-600 text-2xl font-black">¥1,600</div>
+            </div>
+        </div>
+    </main>
+    <!-- 全员集结名单 -->
+    <section class="max-w-md mx-auto px-4">
+        <div class="bg-white rounded-[40px] shadow-2xl border border-gray-50 overflow-hidden">
+            <div class="bg-gray-800 p-5 text-white flex justify-between items-center">
+                <div class="font-black text-lg flex items-center gap-2">✨ 全员光荣榜</div>
+                <span class="text-[9px] bg-white/20 px-2 py-1 rounded-full uppercase tracking-widest">Team Honor List</span>
+            </div>
+            <div class="divide-y divide-gray-50">
+                <script>
+                    const players = [
+                        { name: '李杨', amount: 1200, title: '冲刺标兵', avatar: '🧑🚀' },
+                        { name: '杜沙娜', amount: 800, title: '进步之星', avatar: '👩🏫' },
+                        { name: '刘瑞聪', amount: 800, title: '能量担当', avatar: '🦸♀️' },
+                        { name: '李超', amount: 800, title: '极速达人', avatar: '🏎️' },
+                        { name: '任思维', amount: 800, title: '潜力黑马', avatar: '🧑🎨' },
+                        { name: '杨冉', amount: 400, title: '执行达人', avatar: '🧑🔧' },
+                        { name: '郝天磊', amount: 400, title: '微笑标兵', avatar: '🧑🔬' },
+                    ];
+                    document.write(players.map((p, i) => `
+                        <div class="p-5 flex items-center justify-between hover:bg-gray-50 transition-colors">
+                            <div class="flex items-center gap-4">
+                                <div class="w-6 text-center font-black text-gray-300 italic text-xl">${i + 4}</div>
+                                <div class="w-14 h-14 bg-gray-100 rounded-full flex items-center justify-center text-3xl border-2 border-white shadow-sm">${p.avatar}</div>
+                                <div>
+                                    <div class="font-black text-gray-800 text-lg">${p.name}</div>
+                                    <div class="text-[10px] bg-gray-100 text-gray-500 px-2 py-0.5 rounded-full font-bold inline-block mt-1">${p.title}</div>
+                                </div>
+                            </div>
+                            <div class="text-right">
+                                <div class="font-mono font-black text-gray-700 text-lg">¥${p.amount.toLocaleString()}</div>
+                                <p class="text-[9px] text-green-500 font-bold uppercase tracking-widest">Steady</p>
+                            </div>
+                        </div>
+                    `).join(''));
+                </script>
+            </div>
+        </div>
+    </section>
+    <!-- 底部激励 -->
+    <footer class="max-w-md mx-auto px-4 mt-12 mb-10">
+        <div class="bg-gradient-to-r from-red-600 to-rose-500 p-8 rounded-[45px] shadow-2xl text-center relative overflow-hidden">
+            <div class="relative z-10">
+                <div class="flex justify-center gap-1 mb-4">
+                    <span>⭐</span><span>⭐</span><span>⭐</span><span>⭐</span><span>⭐</span>
+                </div>
+                <h2 class="text-2xl font-black text-white italic tracking-tighter mb-2">" 每一份努力，都将被看见。"</h2>
+                <p class="text-red-100 font-bold text-sm mb-8">下周争霸赛已开启，期待你的再次飞跃！</p>
+                <button id="glory-btn" class="bg-white text-red-600 font-black px-12 py-4 rounded-full shadow-lg text-xl btn-active transition-all active:bg-red-50 flex items-center gap-2 mx-auto">
+                    <span>开启下周辉煌</span> 🚀
+                </button>
+            </div>
+        </div>
+    </footer>
+    <script>
+        // 1. 烟花引擎逻辑
+        const canvas = document.getElementById('firework-canvas');
+        const ctx = canvas.getContext('2d');
+        let particles = [];
+        function resizeCanvas() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        }
+        window.addEventListener('resize', resizeCanvas);
+        resizeCanvas();
+        class FireworkParticle {
+            constructor(x, y, color) {
+                this.x = x;
+                this.y = y;
+                this.color = color;
+                this.size = Math.random() * 4 + 2;
+                this.speedX = Math.random() * 12 - 6;
+                this.speedY = Math.random() * 12 - 6;
+                this.gravity = 0.15;
+                this.friction = 0.96;
+                this.opacity = 1;
+                this.life = Math.random() * 60 + 40;
+            }
+            update() {
+                this.speedY += this.gravity;
+                this.speedX *= this.friction;
+                this.speedY *= this.friction;
+                this.x += this.speedX;
+                this.y += this.speedY;
+                this.opacity -= 1 / this.life;
+            }
+            draw() {
+                ctx.globalAlpha = this.opacity;
+                ctx.fillStyle = this.color;
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                ctx.fill();
+            }
+        }
+        function createExplosion(x, y) {
+            const colors = ['#FFD700', '#FF4500', '#FF1493', '#00BFFF', '#ADFF2F', '#FFFFFF', '#FF8C00'];
+            for (let i = 0; i < 180; i++) {
+                particles.push(new FireworkParticle(x, y, colors[Math.floor(Math.random() * colors.length)]));
+            }
+        }
+        function animateFireworks() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            particles = particles.filter(p => p.opacity > 0);
+            particles.forEach(p => {
+                p.update();
+                p.draw();
+            });
+            requestAnimationFrame(animateFireworks);
+        }
+        animateFireworks();
+        // 按钮点击触发巨大烟花
+        document.getElementById('glory-btn').addEventListener('click', () => {
+            // 中心主爆发
+            createExplosion(canvas.width / 2, canvas.height / 2);
+            // 连环爆发效果
+            setTimeout(() => createExplosion(canvas.width / 2 - 60, canvas.height / 2 - 40), 150);
+            setTimeout(() => createExplosion(canvas.width / 2 + 60, canvas.height / 2 - 40), 300);
+            setTimeout(() => createExplosion(canvas.width / 2, canvas.height / 2 - 80), 450);
+        });
+        // 2. 环境飘落粒子
+        const pContainer = document.getElementById('particle-container');
+        const icons = ['🌸', '✨', '🎈', '🌹', '🌟', '💰'];
+        function createFalling() {
+            const el = document.createElement('div');
+            el.className = 'particle';
+            el.innerText = icons[Math.floor(Math.random() * icons.length)];
+            const size = Math.random() * 20 + 20;
+            el.style.left = Math.random() * 100 + 'vw';
+            el.style.fontSize = size + 'px';
+            el.style.animationDuration = (Math.random() * 4 + 6) + 's';
+            pContainer.appendChild(el);
+            setTimeout(() => el.remove(), 10000);
+        }
+        setInterval(createFalling, 1800);
+        for(let i=0; i<12; i++) createFalling();
+    </script>
+</body>
+</html>
